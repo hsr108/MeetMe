@@ -1,0 +1,25 @@
+.nav-container{
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem;
+}
+
+.nav-logo{
+    margin-left: 1rem;
+    margin-top: 0.5rem;
+    
+}
+
+.nav-links{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-links li{
+    margin-inline: 1rem;
+    text-decoration: none;
+    list-style: none;
+    font-size: 1rem;
+   
+}

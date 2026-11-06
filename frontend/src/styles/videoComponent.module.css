@@ -1,0 +1,405 @@
+/* ─── Video Meet Page Layout ─── */
+
+.meetVideoContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  background-color: #0b0c10;
+  color: #fff;
+  font-family: 'Roboto', sans-serif;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Main Area: taking 90% of screen height */
+.mainLayout {
+  display: flex;
+  flex: 1;
+  height: calc(100vh - 80px);
+  width: 100vw;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Left Section: Video Container */
+.videoSection {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background-color: #121318;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+/* Participant Video Grid */
+.videoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 1.5rem;
+  padding: 1.5rem;
+  flex: 1;
+  align-content: center;
+  justify-content: center;
+  overflow-y: auto;
+  transition: all 0.3s ease;
+}
+
+/* When only one video is present, make it large */
+.videoGrid.singleParticipant {
+  grid-template-columns: minmax(320px, 900px);
+  justify-content: center;
+  align-items: center;
+}
+
+/* Video Card styling */
+.videoCard {
+  position: relative;
+  background: #1c1d24;
+  border-radius: 16px;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  border: 1.5px solid rgba(255, 255, 255, 0.05);
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.videoCard:hover {
+  border-color: rgba(255, 145, 18, 0.5);
+  transform: translateY(-2px);
+}
+
+.videoCard video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 14px;
+}
+
+/* User name label overlay */
+.videoCardName {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  background: rgba(15, 15, 20, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  z-index: 2;
+}
+
+/* Avatar placeholder when camera is off */
+.videoCardAvatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(255, 145, 18, 0.85), #e67e00);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #fff;
+  text-transform: uppercase;
+  box-shadow: 0 8px 24px rgba(255, 145, 18, 0.25);
+  z-index: 1;
+}
+
+/* ─── Right Section: Chat Sidebar ─── */
+.chatPanel {
+  width: 380px;
+  min-width: 380px;
+  height: 100%;
+  background-color: #16171d;
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 5;
+  box-shadow: -5px 0 25px rgba(0, 0, 0, 0.25);
+}
+
+.chatHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.chatHeader h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0;
+  color: #fff;
+}
+
+.chatHeaderCloseBtn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.55);
+  cursor: pointer;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.chatHeaderCloseBtn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.chattingDisplay {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.messageBubble {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 85%;
+  align-self: flex-start;
+}
+
+.messageBubble.self {
+  align-self: flex-end;
+}
+
+.messageSender {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.45);
+  margin-left: 4px;
+}
+
+.messageBubble.self .messageSender {
+  text-align: right;
+  margin-right: 4px;
+}
+
+.messageContent {
+  background: rgba(255, 255, 255, 0.06);
+  padding: 10px 14px;
+  border-radius: 12px;
+  border-top-left-radius: 2px;
+  font-size: 0.92rem;
+  line-height: 1.4;
+  color: #f3f4f6;
+  word-break: break-word;
+}
+
+.messageBubble.self .messageContent {
+  background: linear-gradient(135deg, rgba(255, 145, 18, 0.95), #e67e00);
+  border-radius: 12px;
+  border-top-right-radius: 2px;
+  color: #fff;
+}
+
+/* Chat Input and Emoji Area */
+.chatInputArea {
+  padding: 1.2rem 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  background-color: #121318;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.emojiTriggerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.quickEmojiBar {
+  display: flex;
+  gap: 6px;
+}
+
+.quickEmojiBtn {
+  background: transparent;
+  border: none;
+  font-size: 1.15rem;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.quickEmojiBtn:hover {
+  transform: scale(1.25);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.moreEmojiToggleBtn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 145, 18, 1);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+}
+
+.moreEmojiToggleBtn:hover {
+  background: rgba(255, 145, 18, 0.1);
+}
+
+/* Expanded Emoji Drawer */
+.emojiDrawer {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 4px;
+  max-height: 140px;
+  overflow-y: auto;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.drawerEmojiBtn {
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.drawerEmojiBtn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: scale(1.15);
+}
+
+.chatInputRow {
+  display: flex;
+  gap: 8px;
+}
+
+.chatInputRow .textFieldContainer {
+  flex: 1;
+}
+
+.chatInputRow input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 0.92rem;
+  color: #fff;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.chatInputRow input:focus {
+  border-color: rgba(255, 145, 18, 0.7);
+}
+
+.chatInputRow button {
+  background: linear-gradient(135deg, rgba(255, 145, 18, 1), #e67e00);
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: 600;
+  padding: 0 16px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.chatInputRow button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 145, 18, 0.25);
+}
+
+/* ─── Bottom Section: Control Bar ─── */
+.controlBar {
+  height: 80px;
+  background-color: #0b0c10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.2rem;
+  border-top: 1.5px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+  z-index: 10;
+}
+
+.controlBtn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: #202124;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.controlBtn:hover {
+  background-color: #303134;
+  transform: scale(1.08);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.controlBtn.active {
+  background: linear-gradient(135deg, rgba(255, 145, 18, 0.9), #e67e00);
+  border-color: transparent;
+  box-shadow: 0 4px 15px rgba(255, 145, 18, 0.25);
+}
+
+.controlBtn.disconnect {
+  background: #ea4335;
+  border-color: transparent;
+}
+
+.controlBtn.disconnect:hover {
+  background: #ff5242;
+  box-shadow: 0 4px 15px rgba(234, 67, 53, 0.4);
+}
+
+.controlBtn svg {
+  font-size: 1.3rem;
+}
+
+/* Responsive adjustment */
+@media (max-width: 800px) {
+  .chatPanel {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    min-width: 100%;
+  }
+}
