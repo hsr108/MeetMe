@@ -1,0 +1,78 @@
+/* ─── Confirmation popup (same dark gradient + orange accents as the auth card) ─── */
+
+.confirm-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.6);
+  animation: confirmFade 0.15s ease-out;
+}
+
+.confirm-dialog {
+  width: min(400px, 90vw);
+  padding: 2rem 2rem 1.5rem;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #0f0c29 0%, #1a1a2e 50%, #16213e 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  color: #fff;
+}
+
+.confirm-dialog h2 {
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.confirm-dialog p {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.95rem;
+  margin-bottom: 1.75rem;
+}
+
+.confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.confirm-actions button {
+  padding: 0.65rem 1.3rem;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Roboto', sans-serif;
+}
+
+.confirm-cancel {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #fff;
+}
+
+.confirm-cancel:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.confirm-ok {
+  border: none;
+  background: linear-gradient(135deg, rgba(255, 145, 18, 1), #e67e00);
+  color: #fff;
+}
+
+.confirm-ok:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+@keyframes confirmFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

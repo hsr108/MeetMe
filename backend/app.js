@@ -1,63 +1,32 @@
-import express from "express";
 import { createServer } from "node:http";
-import mongoose from "mongoose";
-import cors from "cors";
-import userRouter from "./src/routes/users_routes.js";
-import authRouter from "./src/routes/AuthRoute.js";
-import cookieParser from "cookie-parser";
-// import authRoute from"./Routes/AuthRoute";
-import dotenv from "dotenv";
-dotenv.config();
+import { env, assertRequiredEnv } from "./src/config/env.js";
+import { createApp } from "./src/createApp.js";
+import { connectDatabaseWithRetry } from "./src/db/connectDatabase.js";
+import { connectToSocket } from "./src/socket/index.js";
 
-import {connectToSocket} from "./src/controllers/socketManager.js";
+const start = () => {
+  assertRequiredEnv();
 
-const uri = process.env.MONGO_URI || "mongodb+srv://MeetMe:MeetMe@meetme.gqz6xsd.mongodb.net/?appName=MeetMe";
+  const app = createApp({ clientOrigins: env.clientOrigins });
+  const server = createServer(app);
+  connectToSocket(server, { clientOrigins: env.clientOrigins });
 
-const app = express();
-
-const server = createServer(app);
-const io = connectToSocket(server);
-
-app.set("port", (process.env.PORT || 5001));
-app.use(cors({
-  origin: [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-    "https://meetme-frontend.onrender.com"
-  ],
-  credentials: true,
-}));
-
-app.use(cookieParser());
-app.use(express.json({limit: "40kb"}));
-app.use(express.urlencoded({limit: "40kb", extended: true }));
-
-import { join, dirname } from "node:path";
-import { fileURLToPath } from "node:url";
-
-
-// __dirname replacement for ES Modules
-const __dirname = dirname(fileURLToPath(import.meta.url));
-
-
-mongoose.connect(uri)
-  .then(() => {
-    console.log("✅ MongoDB connected");
-    server.listen(app.get("port"), () => {
-      console.log(`🚀 Server running on port ${app.get("port") } at http://localhost:${app.get("port")}`);
-    });
-  })
-  .catch(err => {
-    console.error("❌ MongoDB connection error:", err);
+  server.on("error", (err) => {
+    const hint = err.code === "EADDRINUSE" ? ` (port ${env.port} is already in use)` : "";
+    console.error(`❌ HTTP server error${hint}:`, err.message);
+    process.exit(1);
   });
 
-app.get("/" , (req,res) => {    
- res.sendFile(join(__dirname, "index.html"));
-})
+  // Listen first: an unreachable database must not take signaling down with it.
+  server.listen(env.port, () => {
+    console.log(`🚀 Server running on port ${env.port} at http://localhost:${env.port}`);
+  });
+  connectDatabaseWithRetry(env.mongoUri, env.mongoDbName);
+};
 
-app.use("/users", userRouter);
-app.use("/auth", authRouter);
-
-
-
-
+try {
+  start();
+} catch (err) {
+  console.error("❌ Server failed to start:", err.message);
+  process.exit(1);
+}

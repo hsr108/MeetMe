@@ -1,0 +1,77 @@
+/* ─── Auth: page (/auth) and landing-page modal ─── */
+
+/* Shared dark card, same gradient and accents as the guest/join pages */
+.auth-card {
+  position: relative;
+  width: min(440px, 92vw);
+  padding: 2.75rem 2.5rem 2rem;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #0f0c29 0%, #1a1a2e 50%, #16213e 100%);
+  color: #fff;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+/* Standalone /auth: full-screen gradient with the same decorative orbs */
+.auth-page {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #0f0c29 0%, #1a1a2e 50%, #16213e 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-page::before,
+.auth-page::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.15;
+  pointer-events: none;
+}
+
+.auth-page::before {
+  width: 500px;
+  height: 500px;
+  background: rgba(255, 145, 18, 1);
+  top: -150px;
+  right: -100px;
+}
+
+.auth-page::after {
+  width: 400px;
+  height: 400px;
+  background: #4f46e5;
+  bottom: -120px;
+  left: -80px;
+}
+
+/* On the full page the card has no box of its own, like the guest page */
+.auth-page .auth-card {
+  background: transparent;
+  box-shadow: none;
+  z-index: 1;
+}
+
+.auth-close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.auth-close-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}

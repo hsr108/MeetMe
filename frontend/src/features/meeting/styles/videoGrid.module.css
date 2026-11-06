@@ -1,0 +1,88 @@
+/* Participant Video Grid */
+.videoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 1.5rem;
+  padding: 1.5rem;
+  flex: 1;
+  align-content: center;
+  justify-content: center;
+  overflow-y: auto;
+  transition: all 0.3s ease;
+}
+
+/* When only one video is present, make it large */
+.videoGrid.singleParticipant {
+  grid-template-columns: minmax(320px, 900px);
+  justify-content: center;
+  align-items: center;
+}
+
+/* Video Card styling */
+.videoCard {
+  position: relative;
+  background: #1c1d24;
+  border-radius: 16px;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  border: 1.5px solid rgba(255, 255, 255, 0.05);
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.videoCard:hover {
+  border-color: rgba(255, 145, 18, 0.5);
+  transform: translateY(-2px);
+}
+
+.videoCard video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 14px;
+}
+
+/* Self-view is mirrored, like the lobby preview */
+.videoCard video.mirrored {
+  transform: scaleX(-1);
+}
+
+/* User name label overlay */
+.videoCardName {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  background: rgba(15, 15, 20, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  z-index: 2;
+}
+
+/* Avatar placeholder when camera is off */
+.videoCardAvatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(255, 145, 18, 0.85), #e67e00);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #fff;
+  text-transform: uppercase;
+  box-shadow: 0 8px 24px rgba(255, 145, 18, 0.25);
+  z-index: 1;
+}

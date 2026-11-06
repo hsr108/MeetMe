@@ -1,24 +1,17 @@
-import  mongoose from "mongoose";
-import bcrypt from "bcrypt";
+import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  username: { type: String, required: true, unique: true },
+  // Stored lowercase so lookups and the unique index are case-insensitive.
+  email: { type: String, required: true, unique: true, lowercase: true, trim: true },
+  password: { type: String, required: true },
+  // Legacy field kept so existing documents still match the schema; tokens are not stored.
+  token: { type: String },
+  // Function reference: evaluated per document, not once at module load.
+  createdAt: { type: Date, default: Date.now },
+});
 
-    name:{ type: String, required: true },
-    username:{ type: String, required: true, unique: true },
-    password:{ type: String, required: true },
-    token:{ type: String },
-    
-     createdAt: {
-    type: Date,
-    default: new Date(),
-  },
-})
-
-// userSchema.pre("save", async function () {
-//   this.password = await bcrypt.hash(this.password, 12);
-// });
-
-
-const User = mongoose.model("User" , userSchema)
+const User = mongoose.model("User", userSchema);
 
 export default User;

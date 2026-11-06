@@ -1,23 +1,19 @@
+/* padding-top (not the navbar's margin) creates the gap above the navbar: a child's top
+   margin would collapse through this container and expose the white page above it. */
 .Landing-Page-Container {
-  width: 100vw;
-  height: 100vh;
-  background: url("/background.png");
-  background-repeat: no-repeat;
-  background-size: cover;
+  width: 100%;
+  min-height: 100vh;
+  padding-top: 1.75rem;
+  background: #000 url("/background.png") no-repeat center / cover;
   color: white;
+  overflow: hidden;
 }
 
 .Hero-section {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  height: 90vh;
-}
-.Hero-img > img:nth-child(1) {
-  width: 45rem;
-  height: 34.82rem;
-
-  margin-top: 3rem;
+  height: calc(100vh - 7.75rem); /* viewport minus top padding and the floating navbar */
 }
 
 .Hero-text h1 {
@@ -26,8 +22,8 @@
 
 .Hero-text {
   line-height: 3rem;
-  margin-bottom: 4rem;
-  padding-left: 3.5rem;
+  text-align: center;
+  padding-inline: 1.5rem;
 }
 
 
@@ -51,8 +47,9 @@
 }
 
 
+/* The auth content inside paints its own dark gradient card */
 .modal {
-  background: white;
+  background: transparent;
   transform: scale(0.4);
   opacity: 0;
   transition: transform 0.5s ease, opacity 0.3s ease;

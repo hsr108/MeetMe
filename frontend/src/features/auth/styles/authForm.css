@@ -1,0 +1,122 @@
+/* ─── Auth forms (inputs match the guest page) ─── */
+
+.auth-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1.75rem;
+  letter-spacing: -0.5px;
+}
+
+.auth-title span {
+  color: rgba(255, 145, 18, 1);
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.auth-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.auth-field label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.auth-field input {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 0.9rem 1.1rem;
+  font-size: 1rem;
+  color: #fff;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  font-family: 'Roboto', sans-serif;
+}
+
+.auth-field input:focus {
+  border-color: rgba(255, 145, 18, 0.7);
+  box-shadow: 0 0 0 3px rgba(255, 145, 18, 0.15);
+}
+
+.auth-input-wrapper {
+  position: relative;
+  display: flex;
+}
+
+.auth-input-wrapper input {
+  flex: 1;
+  min-width: 0;
+}
+
+.auth-input-wrapper input.has-toggle {
+  padding-right: 3rem; /* room for the eye button */
+}
+
+.auth-password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 0.6rem;
+  transform: translateY(-50%);
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.55);
+  cursor: pointer;
+}
+
+.auth-password-toggle:hover {
+  color: rgba(255, 145, 18, 1);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.auth-submit-btn {
+  margin-top: 0.5rem;
+  padding: 0.95rem;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(255, 145, 18, 1), #e67e00);
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-family: 'Roboto', sans-serif;
+}
+
+.auth-submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 145, 18, 0.35);
+}
+
+.auth-switch {
+  margin-top: 1.25rem;
+  text-align: center;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.auth-switch button {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  font-weight: 600;
+  color: rgba(255, 145, 18, 1);
+  cursor: pointer;
+}
+
+.auth-switch button:hover {
+  text-decoration: underline;
+}

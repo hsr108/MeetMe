@@ -66,17 +66,30 @@ The frontend is a single-page application built using modern web standards.
 
 ### 📂 File Structure
 
-*   [main.jsx](file:///c:/Users/hsr41/.vscode/.vscode/Projects/MeetMe/frontend/src/main.jsx): React application bootstrap and routing.
-*   [environment.js](file:///c:/Users/hsr41/.vscode/.vscode/Projects/MeetMe/frontend/src/environment.js): Dynamically controls the destination server base URL.
-*   [contexts/AuthContext.jsx](file:///c:/Users/hsr41/.vscode/.vscode/Projects/MeetMe/frontend/src/contexts/AuthContext.jsx): Encapsulates authentication state (signup, login, verification, and meeting history).
-*   **Pages**:
-    *   [landingPage.jsx](file:///c:/Users/hsr41/.vscode/.vscode/Projects/MeetMe/frontend/src/pages/landingPage.jsx): Entry landing page with styling transitions.
-    *   [authentication.jsx](file:///c:/Users/hsr41/.vscode/.vscode/Projects/MeetMe/frontend/src/pages/authentication.jsx): Handles sign-up and login forms.
-    *   [guestMeeting.jsx](file:///c:/Users/hsr41/.vscode/.vscode/Projects/MeetMe/frontend/src/pages/guestMeeting.jsx): Details form page for guests to enter Name and Year of Birth.
-    *   [joinMeeting.jsx](file:///c:/Users/hsr41/.vscode/.vscode/Projects/MeetMe/frontend/src/pages/joinMeeting.jsx): Pre-meeting lobby page with live camera/microphone toggles and previews.
-    *   [home.jsx](file:///c:/Users/hsr41/.vscode/.vscode/Projects/MeetMe/frontend/src/pages/home.jsx): Dashboard where registered users can join meetings or generate meeting codes.
-    *   [history.jsx](file:///c:/Users/hsr41/.vscode/.vscode/Projects/MeetMe/frontend/src/pages/history.jsx): Displays lists of meeting history joined by the user.
-    *   [VideoMeet.jsx](file:///c:/Users/hsr41/.vscode/.vscode/Projects/MeetMe/frontend/src/pages/VideoMeet.jsx): The core video meeting interface.
+```
+frontend/src/
+├── main.jsx, App.jsx          # bootstrap + route table
+├── config/                    # environment (API URL), routes, theme colour
+├── api/                       # axios clients: authApi, historyApi
+├── contexts/ + hooks/useAuth  # AuthProvider (signup/login/logout/history/verify)
+├── components/                # Navbar, RequireAuth (protects /home, /history)
+├── utils/sessionPreferences   # sessionStorage hand-off guest → join → meeting
+├── features/
+│   ├── auth/                  # LoginForm, SignupForm, useFormFields
+│   ├── guest/                 # validateGuestDetails + styles
+│   ├── join/                  # useMediaPreview (lobby camera/mic), preview + form
+│   ├── history/               # HistoryCard, formatDate
+│   └── meeting/               # the video call
+│       ├── hooks/             # useMeeting (orchestrator), useSignaling, useUserMedia,
+│       │                      # useScreenShare, useRemoteVideos, useChat
+│       ├── webrtc/            # peerMesh (all peers), peerConnection (one peer)
+│       ├── media/             # stopStream, black/silent placeholder, permission probe
+│       ├── signaling/         # Socket.IO event names, room id
+│       ├── components/        # VideoGrid, Local/RemoteVideoCard, ChatPanel, ControlBar…
+│       └── styles/            # CSS modules per component
+├── pages/                     # thin route pages (*Page.jsx)
+└── styles/                    # global page CSS
+```
 
 ---
 
@@ -93,18 +106,21 @@ The backend is built as a REST API and a real-time Socket.io server to coordinat
 
 ### 📂 File Structure
 
-*   [app.js](file:///c:/Users/hsr41/.vscode/.vscode/Projects/MeetMe/backend/app.js): Entry point configuration. Sets up CORS, cookie-parsers, database initialization, and launches the HTTP and WebSocket listeners.
-*   **Routes**:
-    *   [AuthRoute.js](file:///c:/Users/hsr41/.vscode/.vscode/Projects/MeetMe/backend/src/routes/AuthRoute.js): Router for user credentials verification status.
-    *   [users_routes.js](file:///c:/Users/hsr41/.vscode/.vscode/Projects/MeetMe/backend/src/routes/users_routes.js): Group endpoints for user authentication actions (`/login`, `/signup`, `/logout`) and history storage (`/get_all_activity`, `/add_to_activity`).
-*   **Controllers**:
-    *   [Auth.js](file:///c:/Users/hsr41/.vscode/.vscode/Projects/MeetMe/backend/src/controllers/Auth.js): Executes hashing passwords, checking database records, signing JWTs, and returning cookie headers.
-    *   [AuthMiddleware.js](file:///c:/Users/hsr41/.vscode/.vscode/Projects/MeetMe/backend/src/controllers/AuthMiddleware.js): Intercepts secure requests, verifies incoming JWT browser cookies, and extracts active user identities.
-    *   [history.js](file:///c:/Users/hsr41/.vscode/.vscode/Projects/MeetMe/backend/src/controllers/history.js): CRUD handlers to store and read past meeting sessions associated with users.
-    *   [socketManager.js](file:///c:/Users/hsr41/.vscode/.vscode/Projects/MeetMe/backend/src/controllers/socketManager.js): Contains the WebSocket handlers. Listens for user connection, joins/leaves rooms, handles signal relay events (`signal`), and broadcasts chat messages inside specified active meeting codes.
-*   **Models**:
-    *   [User.js](file:///c:/Users/hsr41/.vscode/.vscode/Projects/MeetMe/backend/src/models/User.js): Schema representing user accounts.
-    *   [Meeting.js](file:///c:/Users/hsr41/.vscode/.vscode/Projects/MeetMe/backend/src/models/Meeting.js): Schema logging past meetings for history tracking.
+```
+backend/
+├── app.js                       # entry: validate env → app → socket → MongoDB → listen
+├── src/config/env.js            # PORT, MONGO_URI, TOKEN_KEY, NODE_ENV, CLIENT_ORIGINS
+├── src/createApp.js             # Express app: CORS, cookies, body limits, routers
+├── src/db/connectDatabase.js
+├── src/routes/                  # userRoutes (/users/*), authRoutes (/auth/*)
+├── src/controllers/             # authController, verifyController, historyController
+├── src/middleware/requireAuth.js# cookie JWT → req.user (401 otherwise)
+├── src/utils/                   # token (JWT), authCookie (set/clear cookie)
+├── src/validators/              # request body validation
+├── src/models/                  # User, Meeting
+├── src/socket/                  # index (Server), registerSocketHandlers, roomStore, socketValidators
+└── test/                        # node:test unit tests (npm test)
+```
 
 ---
 
@@ -187,6 +203,28 @@ npm install
 npm run dev
 ```
 The Vite development server will spin up on [http://localhost:5173](http://localhost:5173).
+
+### 4. Checks
+```bash
+cd backend && npm test          # node:test — socket room store/handlers, validators
+cd frontend && npm test         # node:test — peer mesh, guest validation, prefs
+cd frontend && npm run lint && npm run build
+```
+The backend refuses to start without `MONGO_URI` and `TOKEN_KEY` (see `backend/.env.example`).
+
+### 5. Testing on other devices (phone, second PC)
+Browsers only allow camera/microphone on `https://` or `localhost`, so `http://<your-PC-IP>:5173`
+loads the pages but cannot use the camera. Serve the dev server over HTTPS:
+```bash
+cd frontend
+npm run cert      # creates certs/ for localhost + this PC's current IPs (needs openssl, e.g. Git Bash)
+npm run dev:lan   # https://<your-PC-IP>:5173
+```
+Re-run `npm run cert` (and restart) whenever the PC's IP changes. Only one dev server may use port 5173.
+Open `https://<your-PC-IP>:5173` on the other device and accept the self-signed certificate warning.
+In dev, API and Socket.IO calls go through the Vite proxy (`vite.config.js`) to the backend on
+`localhost:5001`, so only port 5173 needs to be reachable (allow it in Windows Firewall if prompted).
+`certs/` is gitignored; without it the dev server simply runs on plain HTTP.
 
 
 
@@ -366,12 +404,12 @@ File	Change
 main.jsx
 Added /guestmeeting and /join routes before the /:url catch-all
 Navbar.jsx
-"Join as Guest" link now points to /guestmeeting
+"Guest" link now points to /guestmeeting
 landingPage.jsx
 "Get Started" button now navigates to /guestmeeting
 User Flow
 Get Started
-Join as Guest
+Guest
 Name + Y.O.B → Continue
 Meeting Code → Join
 Landing Page
@@ -406,7 +444,7 @@ Add two new routes before the /:url catch-all route:
 /join → <JoinMeeting />
 [MODIFY] 
 Navbar.jsx
-Change "Join as Guest" <Link> to point to /guestmeeting instead of /join
+Change "Guest" <Link> to point to /guestmeeting instead of /join
 [MODIFY] 
 landingPage.jsx
 Make "Get Started" button navigate to /guestmeeting using useNavigate()
@@ -440,7 +478,7 @@ Split-panel layout (video left, controls right), dark theme, rounded video conta
 Verification Plan
 Manual Verification
 Click "Get Started" on landing page → should navigate to /guestmeeting
-Click "Join as Guest" in navbar → should navigate to /guestmeeting
+Click "Guest" in navbar → should navigate to /guestmeeting
 Fill in Name and Year of Birth, click Continue → should navigate to /join
 On /join, camera preview should appear on the left
 Toggle video/audio buttons should work
@@ -461,5 +499,5 @@ Enter a meeting code and click "Join Meeting" → should navigate to /:meetingCo
 [x] Create guestMeeting.jsx page
 [x] Create joinMeeting.jsx page
 [x] Modify main.jsx — add routes
-[x] Modify Navbar.jsx — update "Join as Guest" link
+[x] Modify Navbar.jsx — update "Guest" link
 [x] Modify landingPage.jsx — update "Get Started" button -->
